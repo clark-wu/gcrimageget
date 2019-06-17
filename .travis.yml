@@ -1,0 +1,18 @@
+sudo: required
+
+services:
+  - docker
+
+language:
+  - bash
+
+script:
+  - chmod +x *
+  - pullimages.sh
+
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - ./polyaxon/push-services.sh "$TRAVIS_BRANCH"
+
+notifications:
+  email: false
