@@ -10,7 +10,6 @@ def handleSyncOneImage(client, org, dst):
     image.tag(repository=dstV[0], tag=dstV[1])
     client.images.push(repository=dstV[0], tag=dstV[1])
     _log.info("finish push " + dst)
-    return ""
 
 
 def syncimages(images, username, password):
@@ -21,10 +20,7 @@ def syncimages(images, username, password):
     for i in images:
         tmpr = pool.apply_async(handleSyncOneImage, args=(client,i["org"],i["dst"]))
         res.append(tmpr)
-    for r in res:
-        r.get()
-
-
+    pool.join()
 
 
 if __name__ == "__main__":
