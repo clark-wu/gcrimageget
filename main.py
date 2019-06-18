@@ -1,21 +1,27 @@
 #coding=utf-8
-import argparse,json,docker,logging
+import argparse,json,docker,logging,multiprocessing
 logging.basicConfig(level=logging.DEBUG)
 _log = logging.getLogger(__name__)
 
-def syncimages(images,username,password):
+def syncimages(images, username, password):
     client = docker.from_env()
     client.login(username=username, password=password)
+    pool = multiprocessing.Pool(processes=6)
+    res = []
     for i in images:
-        tmpV = i["org"].split(":")
-        dstV = i["dst"].split(":")
-        image = client.images.pull(tmpV[0],tag=tmpV[1])
-        image.tag(repository=dstV[0],tag=dstV[1])
-        _log.info("finish pull "+ i["org"])
-        _log.info("images list: %s", str(client.images.list()))
-        client.images.push(repository=dstV[0], tag=dstV[1])
-        _log.info("finish push " + i["dst"])
+        tmpr = pool.apply_async(handleSyncOneImage, args=(client,i["org"],i["dst"]))
+        res.append(tmpr)
+    for r in res:
+        r.get()
 
+
+def handleSyncOneImage(client, org, dst):
+    tmpV = org.split(":")
+    dstV = dst.split(":")
+    image = client.images.pull(tmpV[0], tag=tmpV[1])
+    image.tag(repository=dstV[0], tag=dstV[1])
+    client.images.push(repository=dstV[0], tag=dstV[1])
+    _log.info("finish push " + i["dst"])
 
 if __name__ == "__main__":
     parse = argparse.ArgumentParser()
