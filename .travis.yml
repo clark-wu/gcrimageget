@@ -11,10 +11,7 @@ install:
   - pip install docker
 
 script:
-  - python main.py pull -f "$IMAGES_FILENAME"
-
-after_success:
-  - python main.py push -f "$IMAGES_FILENAME" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - python main.py sync -f "$IMAGES_FILENAME" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 
 notifications:
   email: false
