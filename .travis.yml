@@ -4,15 +4,17 @@ services:
   - docker
 
 language:
-  - bash
+  - python
+python:
+  - "3.6"
+install:
+  - pip install docker
 
 script:
-  - chmod +x *
-  - pullimages.sh
+  - python main.py pull -f "$IMAGES_FILENAME"
 
 after_success:
-  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-  - ./polyaxon/push-services.sh "$TRAVIS_BRANCH"
+  - python main.py push -f "$IMAGES_FILENAME" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 
 notifications:
   email: false
