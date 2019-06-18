@@ -12,6 +12,7 @@ def syncimages(images,username,password):
         image = client.images.pull(tmpV[0],tag=tmpV[1])
         image.tag(repository=dstV[0],tag=dstV[1])
         _log.info("finish pull "+ i["org"])
+        _log.info("images list: %s", str(client.images.list()))
         client.images.push(repository=dstV[0], tag=dstV[1])
         _log.info("finish push " + i["dst"])
 
