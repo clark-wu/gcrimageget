@@ -1,5 +1,6 @@
 #coding=utf-8
-import argparse,json,docker,logging,multiprocessing
+import argparse,json,logging,multiprocessing,docker
+
 logging.basicConfig(level=logging.DEBUG)
 _log = logging.getLogger(__name__)
 
@@ -9,7 +10,8 @@ def handleSyncOneImage(client, org, dst):
     image.tag(repository=dstV[0], tag=dstV[1])
     client.images.push(repository=dstV[0], tag=dstV[1])
     _log.info("finish push " + dst)
-    
+    return ""
+
 
 def syncimages(images, username, password):
     client = docker.from_env()
