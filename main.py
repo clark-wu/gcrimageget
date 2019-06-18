@@ -3,6 +3,14 @@ import argparse,json,docker,logging,multiprocessing
 logging.basicConfig(level=logging.DEBUG)
 _log = logging.getLogger(__name__)
 
+def handleSyncOneImage(client, org, dst):
+    dstV = dst.split(":")
+    image = client.images.pull(org)
+    image.tag(repository=dstV[0], tag=dstV[1])
+    client.images.push(repository=dstV[0], tag=dstV[1])
+    _log.info("finish push " + dst)
+    
+
 def syncimages(images, username, password):
     client = docker.from_env()
     client.login(username=username, password=password)
@@ -15,13 +23,7 @@ def syncimages(images, username, password):
         r.get()
 
 
-def handleSyncOneImage(client, org, dst):
-    tmpV = org.split(":")
-    dstV = dst.split(":")
-    image = client.images.pull(tmpV[0], tag=tmpV[1])
-    image.tag(repository=dstV[0], tag=dstV[1])
-    client.images.push(repository=dstV[0], tag=dstV[1])
-    _log.info("finish push " + i["dst"])
+
 
 if __name__ == "__main__":
     parse = argparse.ArgumentParser()
