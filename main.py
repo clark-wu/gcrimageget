@@ -4,7 +4,9 @@ import argparse,json,logging,multiprocessing,docker
 logging.basicConfig(level=logging.DEBUG)
 _log = logging.getLogger(__name__)
 
-def handleSyncOneImage(client, org, dst):
+def handleSyncOneImage(username,password,org, dst):
+    client = docker.from_env()
+    client.login(username=username, password=password)
     dstV = dst.split(":")
     image = client.images.pull(org)
     image.tag(repository=dstV[0], tag=dstV[1])
@@ -13,13 +15,12 @@ def handleSyncOneImage(client, org, dst):
 
 
 def syncimages(images, username, password):
-    client = docker.from_env()
-    client.login(username=username, password=password)
     pool = multiprocessing.Pool(processes=6)
     res = []
     for i in images:
-        tmpr = pool.apply_async(handleSyncOneImage, args=(client,i["org"],i["dst"]))
+        tmpr = pool.apply_async(handleSyncOneImage, args=(username, password,i["org"],i["dst"]))
         res.append(tmpr)
+    pool.close()
     pool.join()
 
 
