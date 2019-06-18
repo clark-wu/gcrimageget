@@ -26,9 +26,9 @@ def pushimages(images,username,password):
 if __name__ == "__main__":
     parse = argparse.ArgumentParser()
     parse.add_argument("actor",type=str,help="actor type:[pull,push,pull-x,push-x]")
-    parse.add_argument("-f", "--imagesfile", "images.json", type=str,help="imagesfile name.")
-    parse.add_argument("-u", "--username", "", type=str, help="docker registry username.")
-    parse.add_argument("-p", "--password", "", type=str, help="docker registry password.")
+    parse.add_argument("-f", "--imagesfile", default="images.json", type=str,help="imagesfile name.")
+    parse.add_argument("-u", "--username", default="", type=str, help="docker registry username.")
+    parse.add_argument("-p", "--password", default="", type=str, help="docker registry password.")
     args = parse.parse_args()
     images = json.load(open(args.imagesfile))
     if args.actor == "pull":
