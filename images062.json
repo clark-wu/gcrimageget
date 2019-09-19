@@ -12,11 +12,11 @@
     "clarkwu/application:1.0-beta"
   ],
   [
-    "gcr.io/kubeflow-images-public/kubernetes-sigs/application:latest",
+    "gcr.io/kubeflow-images-public/kubernetes-sigs/application",
     "clarkwu/application:latest"
   ],
   [
-    "gcr.io/kubeflow-images-public/ingress-setup:latest",
+    "gcr.io/kubeflow-images-public/ingress-setup",
     "clarkwu/ingress-setup:latest"
   ],
   [
