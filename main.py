@@ -18,7 +18,10 @@ def syncimages(images, username, password):
     #pool = multiprocessing.Pool(processes=4)
     #res = []
     for i in images:
-        handleSyncOneImage(username, password,i[0],i[1])
+        try:
+            handleSyncOneImage(username, password,i[0],i[1])
+        except Exception as e:
+            pass
         # tmpr = pool.apply_async(handleSyncOneImage, args=(username, password,i[0],i[1]))
         # res.append(tmpr)
     #pool.close()
