@@ -11,10 +11,7 @@ install:
   - pip install docker
 
 script:
-  #- travis_wait 3600 python main.py sync -f "$IMAGES_FILENAME" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" -t="$SYNC_TYPE"
-  - chmod +x pullimages.sh
-  - ./pullimages.sh "$GNAME" "$GPASS"
-
+  - travis_wait 3600 python main.py sync -f "$IMAGES_FILENAME" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" -t="$SYNC_TYPE"
 
 notifications:
   email: false
