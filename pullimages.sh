@@ -1,7 +1,9 @@
 #/bin/bash
 
 curl http://metadata.google.internal/computeMetadata/v1/instance/zone -H "Metadata-Flavor: Google"
-ls
+echo "start........"
+cat projects/539774316296/zones/us-central1-cdockerbuild.sh
+echo "start........"
 git config --global user.name $1
 git config --global user.password $2
 
