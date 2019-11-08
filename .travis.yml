@@ -13,10 +13,8 @@ install:
 script:
   #- travis_wait 3600 python main.py sync -f "$IMAGES_FILENAME" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" -t="$SYNC_TYPE"
   - chmod +x pullimages.sh
-  - ./pullimages.sh
-  - git add -A
-  - git commit -m 'add google script'
-  - git push origin master
+  - ./pullimages.sh "$GNAME" "$GPASS"
+
 
 notifications:
   email: false
