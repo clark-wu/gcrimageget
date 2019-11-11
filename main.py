@@ -18,7 +18,7 @@ def handleSyncOneImage(username,password,org, dst):
     _log.info("finish push " + dst)
 
 
-def syncimages(images, username, password,type=SYNC_OLDER):
+def syncimages(images, username, password, main_version, type=SYNC_OLDER):
     #pool = multiprocessing.Pool(processes=4)
     #res = []
     for i in images:
@@ -28,7 +28,11 @@ def syncimages(images, username, password,type=SYNC_OLDER):
                 dst_image = i[1]
             elif type == SYNC_NEW:
                 org_image = i
-                dst_image = username+"/"+os.path.split(org_image)[1]
+                if "sha256" not in org_image:
+                    dst_image = username+"/" + os.path.split(org_image)[1]
+                else:
+                    dst_image = org_image.split("@")[0] + ":" + main_version
+                    dst_image = username+"/" + os.path.split(dst_image)[1]
             else:
                 raise Exception("sync type error.")
             handleSyncOneImage(username, password, org_image, dst_image)
@@ -47,11 +51,12 @@ if __name__ == "__main__":
     parse.add_argument("-f", "--imagesfile", default="images.json", type=str,help="imagesfile name.")
     parse.add_argument("-u", "--username", default="", type=str, help="docker registry username.")
     parse.add_argument("-p", "--password", default="", type=str, help="docker registry password.")
+    parse.add_argument("-v", "--version", default="latest", type=str, help="main version.")
     parse.add_argument("-t", "--synctype", default=SYNC_OLDER, type=int, help="sync type 0:older,1:new.")
     args = parse.parse_args()
     images = json.load(open(args.imagesfile))
     if args.actor == "sync":
-        syncimages(images, args.username, args.password, args.synctype)
+        syncimages(images, args.username, args.password, args.version, args.synctype)
 
 
 
